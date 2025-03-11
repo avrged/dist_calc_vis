@@ -1,4 +1,4 @@
-# Calculadora de Distribuciones de Probabilidad (DistProbCalc)
+# Calculadora de Distribuciones de Probabilidad
 
 Una aplicación desarrollada en Python para calcular y visualizar distribuciones de probabilidad discretas. Construida con tkinter y matplotlib, con renderización de fórmulas LaTeX en tiempo real y cálculos de probabilidad interactivos.
 
