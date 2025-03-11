@@ -1,0 +1,43 @@
+\documentclass{standalone}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\newcommand{\binomialformula}[3]{
+    P(X = #2) = \binom{#1}{#2} (#3)^{#2} (1-#3)^{#1-#2}
+}
+
+\newcommand{\hipergeometricaformula}[4]{
+    P(X = #4) = \frac{\binom{#2}{#4} \binom{#1-#2}{#3-#4}}{\binom{#1}{#3}}
+}
+
+\newcommand{\bernoulliformula}[2]{
+    P(X = #2) = (#1)^{#2} (1-#1)^{1-#2}
+}
+
+\newcommand{\geometricaformula}[2]{
+    P(X = #2) = (1-#1)^{#2-1} #1
+}
+
+\newcommand{\poissonformula}[2]{
+    P(X = #2) = \frac{#1^{#2} e^{-#1}}{#2!}
+}
+
+\begin{document}
+
+% Ejemplo de uso:
+% Binomial
+\[\binomialformula{10}{4}{0.5}\]
+
+% Hipergeométrica
+\[\hipergeometricaformula{50}{20}{10}{4}\]
+
+% Bernoulli
+\[\bernoulliformula{0.5}{1}\]
+
+% Geométrica
+\[\geometricaformula{0.3}{5}\]
+
+% Poisson
+\[\poissonformula{2.5}{3}\]
+
+\end{document}
