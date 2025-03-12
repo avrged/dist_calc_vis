@@ -3,7 +3,7 @@ import importlib
 import tkinter as tk
 import stats_functions as stfn
 import matplotlib.pyplot as plt
-from tkinter import Label, Button, Frame, ttk
+from tkinter import Label, Button, Frame, ttk, messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from scipy.stats import binom, hypergeom, bernoulli, geom, poisson
 from matplotlib.figure import Figure
@@ -153,6 +153,51 @@ def update_formula(fig):
     canvas.draw()
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
+def show_random_samples(dist_type, **params):
+    # Crear nueva ventana
+    samples_window = tk.Toplevel()
+    samples_window.title("Histograma de Muestras Aleatorias")
+    samples_window.configure(bg=Style.BG_PRIMARY)
+    
+    # Generar muestras según la distribución
+    try:
+        if dist_type == "BINOMIAL":
+            samples = binom.rvs(n=params['n'], p=params['p'], size=1000)
+        elif dist_type == "HIPERGEOMETRICA":
+            samples = hypergeom.rvs(M=params['N'], n=params['n'], N=params['K'], size=1000)
+        elif dist_type == "BERNOULLI":
+            samples = bernoulli.rvs(p=params['p'], size=1000)
+        elif dist_type == "GEOMETRICA":
+            samples = geom.rvs(p=params['p'], size=1000)
+        elif dist_type == "POISSON":
+            samples = poisson.rvs(mu=params['lam'], size=1000)
+        
+        # Crear figura
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.hist(samples, bins='auto', color=Style.SECONDARY, edgecolor=Style.PRIMARY)
+        
+        # Estilo del histograma
+        ax.set_title('Histograma de 1000 Muestras Aleatorias', 
+                     color=Style.PRIMARY, 
+                     pad=20)
+        ax.set_xlabel('Valores', color=Style.TEXT_SECONDARY)
+        ax.set_ylabel('Frecuencia', color=Style.TEXT_SECONDARY)
+        
+        # Configurar estilo
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['left'].set_color(Style.TEXT_SECONDARY)
+        ax.spines['bottom'].set_color(Style.TEXT_SECONDARY)
+        
+        # Mostrar en la nueva ventana
+        canvas = FigureCanvasTkAgg(fig, master=samples_window)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+    except Exception as e:
+        messagebox.showerror("Error", f"Error al generar las muestras: {str(e)}")
+        samples_window.destroy()
+
 # Funcion para los procesos a realizar con el boton de calcular (submit)
 def on_button_click(text):
     def submit():
@@ -168,6 +213,13 @@ def on_button_click(text):
             formula_fig = create_formula(text, n=n, x=x, p=p)
             update_formula(formula_fig)
             plot_binomial(n, p, buscar, condicion)
+            
+            # Agregar botón de muestras aleatorias
+            Button(input_frame, 
+                   text="Cálculo con muestras aleatorias", 
+                   command=lambda: show_random_samples("BINOMIAL", n=n, p=p),
+                   **Style.BUTTON_CONFIG).grid(row=7, column=0, columnspan=2, pady=5)
+            
         elif text == "HIPERGEOMETRICA":
             N = int(N_entry.get())
             K = int(K_entry.get())
@@ -178,6 +230,13 @@ def on_button_click(text):
             formula_fig = create_formula(text, N=N, K=K, n=n, k=k)
             update_formula(formula_fig)
             plot_hipergeometrica(N, K, n, buscar, condicion)
+            
+            # Agregar botón de muestras aleatorias
+            Button(input_frame, 
+                   text="Cálculo con muestras aleatorias",
+                   command=lambda: show_random_samples("HIPERGEOMETRICA", N=N, K=K, n=n),
+                   **Style.BUTTON_CONFIG).grid(row=7, column=0, columnspan=2, pady=5)
+            
         elif text == "BERNOULLI":
             p = float(p_entry.get())
             x = int(x_entry.get())
@@ -189,6 +248,13 @@ def on_button_click(text):
             formula_fig = create_formula(text, p=p, x=x)
             update_formula(formula_fig)
             plot_bernoulli(p, buscar, condicion)
+            
+            # Agregar botón de muestras aleatorias
+            Button(input_frame, 
+                   text="Cálculo con muestras aleatorias",
+                   command=lambda: show_random_samples("BERNOULLI", p=p),
+                   **Style.BUTTON_CONFIG).grid(row=7, column=0, columnspan=2, pady=5)
+            
         elif text == "GEOMETRICA":
             p = float(p_entry.get())
             x = int(x_entry.get())
@@ -197,6 +263,13 @@ def on_button_click(text):
             formula_fig = create_formula(text, p=p, x=x)
             update_formula(formula_fig)
             plot_geometrica(p, buscar, condicion)
+            
+            # Agregar botón de muestras aleatorias
+            Button(input_frame, 
+                   text="Cálculo con muestras aleatorias",
+                   command=lambda: show_random_samples("GEOMETRICA", p=p),
+                   **Style.BUTTON_CONFIG).grid(row=7, column=0, columnspan=2, pady=5)
+            
         elif text == "POISSON":
             lam = float(lam_entry.get())
             k = int(k_entry.get())
@@ -205,9 +278,13 @@ def on_button_click(text):
             formula_fig = create_formula(text, lam=lam, k=k)
             update_formula(formula_fig)
             plot_poisson(lam, buscar, condicion)
-        else:
-            result_label.config(text=f"Distribución no implementada: {text}")
-
+            
+            # Agregar botón de muestras aleatorias
+            Button(input_frame, 
+                   text="Cálculo con muestras aleatorias",
+                   command=lambda: show_random_samples("POISSON", lam=lam),  # Changed from 'lambda' to 'lam'
+                   **Style.BUTTON_CONFIG).grid(row=7, column=0, columnspan=2, pady=5)
+    
     for widget in variable_frame.winfo_children():
         widget.destroy()
 
@@ -414,6 +491,46 @@ def plot_distribution(x, y, title, buscar, condicion):
     canvas = FigureCanvasTkAgg(fig, master=plot_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+def show_random_samples(dist_type, **params):
+    # Crear nueva ventana
+    samples_window = tk.Toplevel()
+    samples_window.title("Histograma de Muestras Aleatorias")
+    samples_window.configure(bg=Style.BG_PRIMARY)
+    
+    # Generar muestras según la distribución
+    if dist_type == "BINOMIAL":
+        samples = binom.rvs(n=params['n'], p=params['p'], size=1000)
+    elif dist_type == "HIPERGEOMETRICA":
+        samples = hypergeom.rvs(M=params['N'], n=params['n'], N=params['K'], size=1000)
+    elif dist_type == "BERNOULLI":
+        samples = bernoulli.rvs(p=params['p'], size=1000)
+    elif dist_type == "GEOMETRICA":
+        samples = geom.rvs(p=params['p'], size=1000)
+    elif dist_type == "POISSON":
+        samples = poisson.rvs(mu=params['lambda'], size=1000)
+    
+    # Crear figura
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.hist(samples, bins='auto', color=Style.SECONDARY, edgecolor=Style.PRIMARY)
+    
+    # Estilo del histograma
+    ax.set_title('Histograma de 1000 Muestras Aleatorias', 
+                 color=Style.PRIMARY, 
+                 pad=20)
+    ax.set_xlabel('Valores', color=Style.TEXT_SECONDARY)
+    ax.set_ylabel('Frecuencia', color=Style.TEXT_SECONDARY)
+    
+    # Configurar estilo
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_color(Style.TEXT_SECONDARY)
+    ax.spines['bottom'].set_color(Style.TEXT_SECONDARY)
+    
+    # Mostrar en la nueva ventana
+    canvas = FigureCanvasTkAgg(fig, master=samples_window)
+    canvas.draw()
+    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
 # Funcion para darle estilo a la GUI y crearla
 def create_gui():
