@@ -324,31 +324,26 @@ def plot_binomial(n, p, buscar, condicion):
     x_posibles = list(range(n + 1))
     resultados = [stfn.binomial(n, x, p) for x in x_posibles]
     plot_distribution(x_posibles, resultados, "", buscar, condicion)
-    plot_histogram(binom.rvs(n, p, size=1000), "")
 
 def plot_hipergeometrica(N, K, n, buscar, condicion):
     x_posibles = list(range(min(K, n) + 1))
     resultados = [stfn.hipergeometrica(N, K, n, x) for x in x_posibles]
     plot_distribution(x_posibles, resultados, "", buscar, condicion)
-    plot_histogram(hypergeom.rvs(N, K, n, size=1000), "")
 
 def plot_bernoulli(p, buscar, condicion):
     x_posibles = [0, 1]
     resultados = [stfn.bernoulli(p, x) for x in x_posibles]
     plot_distribution(x_posibles, resultados, "", buscar, condicion)
-    plot_histogram(bernoulli.rvs(p, size=1000), "")
 
 def plot_geometrica(p, buscar, condicion):
     x_posibles = list(range(1, 11))
     resultados = [stfn.geometrica(p, x) for x in x_posibles]
     plot_distribution(x_posibles, resultados, "", buscar, condicion)
-    plot_histogram(geom.rvs(p, size=1000), "")
 
 def plot_poisson(lam, buscar, condicion):
     x_posibles = list(range(20))
     resultados = [stfn.poisson(lam, x) for x in x_posibles]
     plot_distribution(x_posibles, resultados, "", buscar, condicion)
-    plot_histogram(poisson.rvs(lam, size=1000), "")
 
 def plot_distribution(x, y, title, buscar, condicion):
     for widget in plot_frame.winfo_children():
@@ -389,7 +384,7 @@ def plot_distribution(x, y, title, buscar, condicion):
         prob_acum = sum(y)
         prob_text = f"Probabilidad total = {prob_acum:.4f}%"
 
-       # Colorear las barras según la condición
+    # Colorear las barras según la condición
     for i in indices:
         ax.bar(x[i], y[i], color=Style.PRIMARY, edgecolor=None)
 
@@ -416,17 +411,6 @@ def plot_distribution(x, y, title, buscar, condicion):
     # Ajustar layout con márgenes específicos
     plt.tight_layout(pad=1.5, rect=[0.05, 0.1, 0.95, 0.95])
 
-    canvas = FigureCanvasTkAgg(fig, master=plot_frame)
-    canvas.draw()
-    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
-
-# Caracteristicas de la grafica 
-def plot_histogram(data, title):
-    fig, ax = plt.subplots()
-    ax.hist(data, bins=30, color='c', edgecolor='r')
-    ax.set_title(title)
-    ax.set_xlabel('Valores')
-    ax.set_ylabel('Frecuencia')
     canvas = FigureCanvasTkAgg(fig, master=plot_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
