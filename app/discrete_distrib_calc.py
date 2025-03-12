@@ -313,7 +313,7 @@ def on_button_click(text):
     condicion_combobox.grid(row=5, column=1, padx=5, pady=5)
     condicion_combobox.set("Indiferente")
 
-    Button(input_frame, text="Submit", command=submit, **Style.BUTTON_CONFIG).grid(row=6, column=0, columnspan=2, pady=10)
+    Button(input_frame, text="Calcular", command=submit, **Style.BUTTON_CONFIG).grid(row=6, column=0, columnspan=2, pady=10)
 
     # Mostrar fórmula base inicial
     initial_fig = create_base_formula(text)
