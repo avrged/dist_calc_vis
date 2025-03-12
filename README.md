@@ -16,6 +16,7 @@ Cada distribución incluye:
 - Visualización de fórmulas LaTeX en tiempo real
 - Cálculos de probabilidad dinámicos
 - Representación visual mediante gráficos de barras
+- Representación con 1000 muestras en cada caso
 - Cálculos de probabilidad condicional
 
 ## Características Principales
