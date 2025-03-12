@@ -27,7 +27,6 @@ Cada distribución incluye:
   - Menor/Mayor que
   - Menor/Mayor o igual que
   - Diferente de
-- 🎨 Interfaz moderna con tema de color personalizado
 - 📱 Diseño responsivo que se adapta a diferentes tamaños de pantalla
 
 ## Tecnologías Utilizadas
