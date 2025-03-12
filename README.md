@@ -62,8 +62,6 @@ python discrete_distrib_calc.py
 
 E.M.N. (@avrged) 
 
-*Nota: El código base fue desarrollado con la asistencia de Claude 3.5 Sonnet.*
-
 ## Licencia
 
 Licencia MIT - ¡siéntase libre de usar y modificar!

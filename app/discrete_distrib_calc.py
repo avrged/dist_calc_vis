@@ -1,4 +1,4 @@
-# Codigo por EMN / @avrged, usando Claude 3.5 Sonnet como base.
+# Codigo por EMN / @avrged
 import tkinter as tk
 import importlib
 import stats_functions as stfn
