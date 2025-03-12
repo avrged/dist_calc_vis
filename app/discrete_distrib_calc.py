@@ -1,16 +1,19 @@
 # Codigo por EMN / @avrged
-import tkinter as tk
 import importlib
+import tkinter as tk
 import stats_functions as stfn
-importlib.reload(stfn)
-from tkinter import Label, Button, Frame, ttk
 import matplotlib.pyplot as plt
+from tkinter import Label, Button, Frame, ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from scipy.stats import binom, hypergeom, bernoulli, geom, poisson
 from matplotlib.figure import Figure
 
+importlib.reload(stfn)
+
 class Style:
     # Paleta de colores utilizada
+    # Fueron elegidos gracias a su facilidad de lectura y contraste
+
     PRIMARY = "#2C3E50"      # Azul marino (para barras resaltadas y elementos principales)
     SECONDARY = "#B3C6E7"    # Azul grisáceo claro (para barras normales y elementos secundarios)
     BG_PRIMARY = "#F5F7FA"   # Gris muy claro (fondo general)
@@ -18,7 +21,7 @@ class Style:
     TEXT_PRIMARY = "#2C3E50" # Azul marino (texto principal)
     TEXT_SECONDARY = "#7F8C8D" # Gris (texto secundario)
     HOVER = "#34495E"        # Azul marino más oscuro (para hover de botones)
-        
+
     # Fuentes utilizadas
     FONT_FAMILY = "Segoe UI"
     FONT_TITLE = (FONT_FAMILY, 16, "bold")
@@ -26,7 +29,7 @@ class Style:
     FONT_TEXT = (FONT_FAMILY, 10)
     FONT_BUTTON = (FONT_FAMILY, 9, "bold")
     
-    # Estilizacion de botones
+    # Estilo de botones
     BUTTON_CONFIG = {
         "font": FONT_BUTTON,
         "bg": PRIMARY,       
@@ -243,6 +246,7 @@ def on_button_click(text):
     variable_frame.grid_columnconfigure(0, weight=3)  
     variable_frame.grid_columnconfigure(1, weight=2)
 
+    # Crear entradas de datos (parámetros) según el tipo de distribución
     if text == "BINOMIAL":
         Label(input_frame, text="Número de ensayos (n):", **Style.LABEL_CONFIG).grid(row=0, column=0, padx=5, pady=5)
         n_entry = tk.Entry(input_frame, **Style.ENTRY_CONFIG)
@@ -315,7 +319,7 @@ def on_button_click(text):
     initial_fig = create_base_formula(text)
     update_formula(initial_fig)
 
-# Funciones para poder graficar los resultados dados
+# Funciones para poder graficar los resultados dados utilizando matplotlib y scipy
 def plot_binomial(n, p, buscar, condicion):
     x_posibles = list(range(n + 1))
     resultados = [stfn.binomial(n, x, p) for x in x_posibles]
@@ -487,7 +491,7 @@ def create_gui():
     button_frame = Frame(container, bg=Style.BG_PRIMARY)
     button_frame.grid(row=1, column=0, columnspan=5, pady=int(5 * scale_factor))
     
-    # Botones
+    # Botones para elegir distribución discreta
     discreta_buttons = ["BERNOULLI", "BINOMIAL", "GEOMETRICA", "POISSON", "HIPERGEOMETRICA"]
     
     for i, text in enumerate(discreta_buttons):
